@@ -1,0 +1,57 @@
+# ============================
+#        PYTHON BACKEND
+# ============================
+
+Backend/**/*.pyc
+Backend/**/__pycache__/
+Backend/venv/
+Backend/.venv/
+Backend/env/
+Backend/.env
+Backend/.env.*
+Backend/instance/
+
+# ============================
+#        REACT FRONTEND
+# ============================
+
+Frontend/node_modules/
+Frontend/build/
+Frontend/dist/
+Frontend/.env
+Frontend/.env.*
+Frontend/.pnp
+Frontend/.pnp.js
+
+# ============================
+#        DOCKER
+# ============================
+
+#*********** Esto ignora el docker para github *************
+**/.dockerignore
+**/Dockerfile            
+!docker-compose.yml
+
+# ============================
+#        EDITOR/IDE
+# ============================
+
+.vscode/
+.idea/
+
+# ============================
+#        SISTEMA OPERATIVO
+# ============================
+
+.DS_Store
+Thumbs.db
+
+# ============================
+#        LOGS/TEMP
+# ============================
+
+*.log
+*.tmp
+*.cache
+*.bak
+*.old

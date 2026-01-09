@@ -21,6 +21,7 @@ class Usuario(UsuarioBase):
     activo: bool
     fecha_creacion: datetime
     ultimo_acceso: Optional[datetime]
+    dark_mode: bool = False
     
     class Config:
         from_attributes = True
@@ -31,6 +32,7 @@ class UsuarioResponse(BaseModel):
     email: str
     nombre_completo: Optional[str]
     rol: str
+    dark_mode: bool = False
     
     class Config:
         from_attributes = True
@@ -44,8 +46,8 @@ class Token(BaseModel):
 class ProductoBase(BaseModel):
     nombre: str
     descripcion: Optional[str] = None
-    precio_costo: float  
-    precio_venta: float  
+    precio_costo: float
+    margen_porcentaje: float = 25.0  
     stock: int
     stock_minimo: int = 10
     categoria: Optional[str] = None
@@ -56,16 +58,37 @@ class ProductoCreate(ProductoBase):
 
 class ProductoUpdate(BaseModel):
     nombre: Optional[str] = None
-    precio_costo: Optional[float] = None  
-    precio_venta: Optional[float] = None 
+    precio_costo: Optional[float] = None
+    margen_porcentaje: Optional[float] = None  
     stock: Optional[int] = None
     categoria: Optional[str] = None
     codigo_barras: Optional[str] = None
 
-class Producto(ProductoBase):
+class Producto(BaseModel):  
     id: int
+    nombre: str
+    descripcion: Optional[str] = None
+    precio_costo: float
+    margen_porcentaje: float  
+    precio_venta: float  
+    stock: int
+    stock_minimo: int
+    categoria: Optional[str]
+    codigo_barras: Optional[str]
     activo: bool
     fecha_creacion: datetime
+    
+    class Config:
+        from_attributes = True
+
+# Schema para búsqueda por código de barras
+class ProductoBusqueda(BaseModel):
+    id: int
+    nombre: str
+    precio_venta: float
+    stock: int
+    categoria: Optional[str]
+    codigo_barras: Optional[str]
     
     class Config:
         from_attributes = True
@@ -156,6 +179,7 @@ class UserUpdate(BaseModel):
     nombre_completo: Optional[str] = None
     rol: Optional[str] = None
     activo: Optional[bool] = None
+    dark_mode: Optional[bool] = None
 
 class UserListResponse(BaseModel):
     id: int
@@ -166,6 +190,7 @@ class UserListResponse(BaseModel):
     activo: bool
     fecha_creacion: datetime
     ultimo_acceso: Optional[datetime]
+    dark_mode: bool = False
     
     class Config:
         from_attributes = True
@@ -178,3 +203,16 @@ class UserProfileUpdate(BaseModel):
     username: Optional[str] = None
     nombre_completo: Optional[str] = None
     password: Optional[str] = None
+
+# Schema para actualización masiva de precios
+class ActualizacionPreciosMasivaRequest(BaseModel):
+    producto_ids: List[int]
+    porcentaje_aumento: float
+
+class ActualizacionPreciosMasivaResponse(BaseModel):
+    success: bool
+    productos_actualizados: int
+    message: str
+
+class DarkModeUpdate(BaseModel):
+    dark_mode: bool

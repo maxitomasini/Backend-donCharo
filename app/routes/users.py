@@ -220,6 +220,39 @@ def update_user(
     
     return user
 
+@router.patch("/{user_id}/theme", response_model=schemas.UserListResponse)
+def update_user_theme(
+    user_id: int,
+    theme_data: schemas.DarkModeUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.Usuario = Depends(get_current_user)
+):
+    """
+    Actualizar preferencia de tema del usuario
+    El usuario puede actualizar su propio tema, o un SUPERADMIN puede actualizar cualquiera
+    """
+    # Verificar permisos: solo el mismo usuario o un SUPERADMIN
+    if current_user.id != user_id and current_user.rol.upper() != "SUPERADMIN":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="No tienes permisos para modificar este usuario"
+        )
+    
+    # Buscar usuario
+    user = db.query(models.Usuario).filter(models.Usuario.id == user_id).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Usuario no encontrado"
+        )
+    
+    # Actualizar preferencia de tema
+    user.dark_mode = theme_data.dark_mode
+    db.commit()
+    db.refresh(user)
+    
+    return user
+
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(
     user_id: int,

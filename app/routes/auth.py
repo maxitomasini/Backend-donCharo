@@ -71,7 +71,8 @@ def login(usuario: schemas.UsuarioLogin, db: Session = Depends(get_db)):
             "username": db_user.username,
             "email": db_user.email,
             "nombre_completo": db_user.nombre_completo,
-            "rol": db_user.rol
+            "rol": db_user.rol,
+            "dark_mode": db_user.dark_mode
         }
     }
 

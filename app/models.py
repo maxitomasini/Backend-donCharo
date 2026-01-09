@@ -21,6 +21,7 @@ class Usuario(Base):
     activo = Column(Boolean, default=True)
     fecha_creacion = Column(DateTime, default=datetime.now)
     ultimo_acceso = Column(DateTime)
+    dark_mode = Column(Boolean, default=False)
 
 class Producto(Base):
     __tablename__ = "productos"
@@ -28,17 +29,19 @@ class Producto(Base):
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String(200), nullable=False)
     descripcion = Column(String(500))
-    precio_costo = Column(Float, nullable=False, default=0)  
-    precio_venta = Column(Float, nullable=False)  
+    precio_costo = Column(Float, nullable=False, default=0)
+    margen_porcentaje = Column(Float, nullable=False, default=25.0)  
+    precio_venta = Column(Float, nullable=False) 
     stock = Column(Integer, default=0)
     stock_minimo = Column(Integer, default=10)
     categoria = Column(String(100))
-    codigo_barras = Column(String(50), unique=True, index=True)  
+    codigo_barras = Column(String(50), unique=True, index=True)
     activo = Column(Boolean, default=True)
     fecha_creacion = Column(DateTime, default=datetime.now)
     fecha_actualizacion = Column(DateTime, default=datetime.now, onupdate=datetime.now)
     
-    items_venta = relationship("ItemVenta", back_populates="producto")
+    items_venta = relationship("ItemVenta", back_populates="producto")  
+
 class Venta(Base):
     __tablename__ = "ventas"
     
